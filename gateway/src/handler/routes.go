@@ -11,6 +11,14 @@ func (s *Server) initRoutes() {
 	auth := api.Group("/auth")
 	loginHandlers(auth)
 
+	market := api.Group("/market")
+	marketService(market, s.mw)
+
+	user := api.Group("/user_service")
+	userService(user, s.mw)
+
+	billing := api.Group("/billing")
+	billingService(billing, s.mw)
 }
 
 func loginHandlers(router fiber.Router) {
@@ -22,7 +30,7 @@ func loginHandlers(router fiber.Router) {
 }
 
 func userService(router fiber.Router, mw interfaces.Middleware) {
-	router.Get("/user_info", mw.Authed(), nil)
+	router.Get("/self_info", mw.Authed(), nil)
 
 	router.Patch("/update_password", mw.Authed(), mw.OTPCheck(), nil)
 	router.Patch("/update_otp", mw.Authed(), mw.OTPCheck(), nil)
@@ -32,12 +40,23 @@ func marketService(router fiber.Router, mw interfaces.Middleware) {
 	// get all offers
 	router.Get("/", nil)
 	router.Get("/details/:id/free_records", nil)
+	router.Get("/details/:id/feedbacks", nil)
 	router.Get("/details/:id", nil)
+
+	// sellers info and offers
+	router.Get("/seller/:id/offers")
+	router.Get("/seller/:id/feedbacks")
+	router.Get("/seller/:id")
 
 	router.Post("/subscribe", mw.Authed(), nil)
 	router.Post("/unsubscribe", mw.Authed(), nil)
 
-	seller := router.Group("/seller", mw.SellerCheck())
+	router.Post("/feedback", mw.Authed(), nil)
+
+	// пожаловаться на объявление
+	router.Post("/report", mw.Authed(), nil)
+
+	seller := router.Group("/seller_panel", mw.SellerCheck())
 	seller.Post("/offer", nil)
 	seller.Patch("/offer/:offer_id", nil)
 	seller.Delete("/offer/:offer_id", nil)
