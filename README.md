@@ -1,2 +1,2 @@
 # tat-gateway
-this gatreway service for tat project
+this gateway service for tat project
