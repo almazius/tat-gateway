@@ -1,7 +1,7 @@
 package main
 
 import (
-	"gateway/src/config"
+	"gateway/gateway/config"
 	"log/slog"
 	"os"
 )

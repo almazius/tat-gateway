@@ -13,7 +13,13 @@ var (
 )
 
 type Config struct {
-	Server Server `json:"server"`
+	Server     Server      `json:"server"`
+	AuthServer AuthService `json:"auth_serice"`
+}
+
+type AuthService struct {
+	Enabled bool   `json:"enabled"`
+	URl     string `json:"url"`
 }
 
 type Server struct {
