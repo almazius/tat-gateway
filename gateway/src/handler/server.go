@@ -3,12 +3,15 @@ package handler
 import (
 	"fmt"
 	interfaces "gateway/gateway/pkg/interface"
+	"gateway/gateway/src/handler/handlers"
 	"github.com/gofiber/fiber/v2"
 )
 
 type Server struct {
 	app *fiber.App
 	mw  interfaces.Middleware
+
+	LoginHandlers handlers.LoginHandler
 }
 
 func NewServer() *Server {

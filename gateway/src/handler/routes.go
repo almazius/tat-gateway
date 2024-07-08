@@ -9,34 +9,34 @@ func (s *Server) initRoutes() {
 	api := s.app.Group("/api")
 
 	auth := api.Group("/auth")
-	loginHandlers(auth)
+	s.loginHandlers(auth)
 
 	market := api.Group("/market")
-	marketService(market, s.mw)
+	s.marketService(market, s.mw)
 
 	user := api.Group("/user_service")
-	userService(user, s.mw)
+	s.userService(user, s.mw)
 
 	billing := api.Group("/billing")
-	billingService(billing, s.mw)
+	s.billingService(billing, s.mw)
 }
 
-func loginHandlers(router fiber.Router) {
-	router.Post("/login", nil)
-	router.Post("/register", nil)
+func (s *Server) loginHandlers(router fiber.Router) {
+	router.Post("/login", s.LoginHandlers.Login())
+	router.Post("/register", s.LoginHandlers.Register())
 
 	router.Post("/reset_password", nil)
 	router.Post("/verify_code", nil)
 }
 
-func userService(router fiber.Router, mw interfaces.Middleware) {
+func (s *Server) userService(router fiber.Router, mw interfaces.Middleware) {
 	router.Get("/self_info", mw.Authed(), nil)
 
 	router.Patch("/update_password", mw.Authed(), mw.OTPCheck(), nil)
 	router.Patch("/update_otp", mw.Authed(), mw.OTPCheck(), nil)
 }
 
-func marketService(router fiber.Router, mw interfaces.Middleware) {
+func (s *Server) marketService(router fiber.Router, mw interfaces.Middleware) {
 	// get all offers
 	router.Get("/", nil)
 	router.Get("/details/:id/free_records", nil)
@@ -62,7 +62,7 @@ func marketService(router fiber.Router, mw interfaces.Middleware) {
 	seller.Delete("/offer/:offer_id", nil)
 }
 
-func billingService(router fiber.Router, mw interfaces.Middleware) {
+func (s *Server) billingService(router fiber.Router, mw interfaces.Middleware) {
 	router.Post("/payment", mw.Authed(), nil)
 	router.Get("/payment_history", mw.Authed(), nil)
 }
