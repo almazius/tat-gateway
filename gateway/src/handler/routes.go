@@ -19,7 +19,7 @@ func (s *Server) initRoutes() {
 
 	billing := api.Group("/billing")
 	s.billingService(billing, s.mw)
-	_ = billing
+
 }
 
 func (s *Server) loginHandlers(router fiber.Router) {
