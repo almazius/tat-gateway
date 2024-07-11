@@ -14,7 +14,7 @@ var (
 
 type Config struct {
 	Server     Server      `json:"server"`
-	AuthServer AuthService `json:"auth_serice"`
+	AuthServer AuthService `json:"auth_service"`
 }
 
 type AuthService struct {
